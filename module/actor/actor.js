@@ -87,11 +87,10 @@ export class ratasenlasparedesActor extends Actor {
         if (data.type === 'npc') {
             link = false;
         }
-        data.token = data.token || {};
-        mergeObject(data.token, {
+        data.prototypeToken = data.prototypeToken || {};
+        foundry.utils.mergeObject(data.prototypeToken, {
             vision: true,
-            dimSight: 30,
-            brightSight: 0,
+            sight: { range: 30, bright: 0 },
             actorLink: link,
             disposition: 1,
         });

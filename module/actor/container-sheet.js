@@ -5,7 +5,7 @@ export class ratasenlasparedesContainerSheet extends ratasenlasparedesActorSheet
 
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["ratasenlasparedes", "sheet", "actor", "container"],
       template: "systems/ratasenlasparedes/templates/actor/container-sheet.html",
       width: 520,
