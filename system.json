@@ -2,99 +2,103 @@
   "id": "ratasenlasparedes",
   "title": "Ratas en las paredes",
   "description": "Ratas en las paredes para FoundryVTT!",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "compatibility": {
-	"minimum": "13",
-	"verified": "13"
+    "minimum": "14",
+    "verified": "14"
   },
-      "authors": [
+  "authors": [
     {
       "name": "jvir"
     },
-	{
+    {
       "name": "NeV3rKilL"
     },
-	{
+    {
       "name": "ParvusDomus"
     },
-	{
-	  "name": "Don Goblin"
-	}
+    {
+      "name": "Don Goblin"
+    }
   ],
-  "esmodules": ["module/ratasenlasparedes.js", "module/style/pause-customizer.js", "module/style/module.js"],
-  "styles": ["css/ratasenlasparedes.css","css/pause-customizer.css"],
+  "esmodules": [
+    "module/ratasenlasparedes.js",
+    "module/style/pause-customizer.js",
+    "module/style/module.js"
+  ],
+  "styles": ["css/ratasenlasparedes.css", "css/pause-customizer.css"],
   "scripts": [],
   "packs": [
-        {
-			"name": "armas",
-			"label": "Armas",
-			"system": "ratasenlasparedes",
-			"path": "./packs/armas.db",
-			"type": "Item"
-		},
-		{
-			"name": "ayudas",
-			"label": "Ayudas",
-			"system": "ratasenlasparedes",
-			"path": "./packs/ayudas.db",
-			"type": "JournalEntry"
-		},
-		{
-			"name": "equipo",
-			"label": "Equipo",
-			"system": "ratasenlasparedes",
-			"path": "./packs/equipo.db",
-			"type": "Item"
-		},
-		{
-			"name": "profesiones",
-			"label": "Profesiones",
-			"system": "ratasenlasparedes",
-			"path": "./packs/profesiones.db",
-			"type": "Item"
-		},
-		{
-			"name": "reputaciones",
-			"label": "Reputaciones",
-			"system": "ratasenlasparedes",
-			"path": "./packs/reputaciones.db",
-			"type": "Item"
-		},
-		{
-			"name": "hechizos",
-			"label": "Hechizos",
-			"system": "ratasenlasparedes",
-			"path": "./packs/hechizos.db",
-			"type": "Item"
-		},
-		{
-			"name": "experiencia",
-			"label": "Estigmas",
-			"system": "ratasenlasparedes",
-			"path": "./packs/experiencia.db",
-			"type": "Item"
-		},
-		{
-			"name": "tablas",
-			"label": "Tablas",
-			"system": "ratasenlasparedes",
-			"path": "./packs/tablas.db",
-			"type": "RollTable"
-		},
-		{
-			"name": "antagonistas",
-			"label": "Antagonistas",
-			"system": "ratasenlasparedes",
-			"path": "./packs/antagonistas.db",
-			"type": "Actor"
-		},
-        {
-			"name": "horrores-tras-los-muros-de-la-cordura",
-			"label": "Horrores tras los muros de la cordura",
-			"system": "ratasenlasparedes",
-			"path": "./packs/horrores-tras-los-muros-de-la-cordura.db",
-			"type": "Actor"
-		}
+    {
+      "name": "armas",
+      "label": "Armas",
+      "system": "ratasenlasparedes",
+      "path": "packs/armas",
+      "type": "Item"
+    },
+    {
+      "name": "ayudas",
+      "label": "Ayudas",
+      "system": "ratasenlasparedes",
+      "path": "packs/ayudas",
+      "type": "JournalEntry"
+    },
+    {
+      "name": "equipo",
+      "label": "Equipo",
+      "system": "ratasenlasparedes",
+      "path": "packs/equipo",
+      "type": "Item"
+    },
+    {
+      "name": "profesiones",
+      "label": "Profesiones",
+      "system": "ratasenlasparedes",
+      "path": "packs/profesiones",
+      "type": "Item"
+    },
+    {
+      "name": "reputaciones",
+      "label": "Reputaciones",
+      "system": "ratasenlasparedes",
+      "path": "packs/reputaciones",
+      "type": "Item"
+    },
+    {
+      "name": "hechizos",
+      "label": "Hechizos",
+      "system": "ratasenlasparedes",
+      "path": "packs/hechizos",
+      "type": "Item"
+    },
+    {
+      "name": "experiencia",
+      "label": "Estigmas",
+      "system": "ratasenlasparedes",
+      "path": "packs/experiencia",
+      "type": "Item"
+    },
+    {
+      "name": "tablas",
+      "label": "Tablas",
+      "system": "ratasenlasparedes",
+      "path": "packs/tablas",
+      "type": "RollTable"
+    },
+    {
+      "name": "antagonistas",
+      "label": "Antagonistas",
+      "system": "ratasenlasparedes",
+      "path": "packs/antagonistas",
+      "type": "Actor"
+    },
+    {
+      "name": "horrores-tras-los-muros-de-la-cordura",
+      "label": "Horrores tras los muros de la cordura",
+      "system": "ratasenlasparedes",
+      "path": "packs/horrores-tras-los-muros-de-la-cordura",
+      "type": "Actor"
+    }
   ],
   "languages": [
     {
@@ -106,8 +110,8 @@
   "primaryTokenAttribute": "pv",
   "secondaryTokenAttribute": "pc",
   "url": "https://github.com/bernardoclon/ratasenlasparedes",
-  "manifest": "https://raw.githubusercontent.com/bernardoclon/ratasenlasparedes/refs/heads/main/system.json",
-  "download": "https://github.com/bernardoclon/ratasenlasparedes/archive/refs/tags/V2-0.zip",
+  "manifest": "https://raw.githubusercontent.com/srxavi/ratasenlasparedes/refs/heads/v14/system.json",
+  "download": "https://github.com/srxavi/ratasenlasparedes/archive/refs/tags/V3-0.zip",
   "license": "LICENSE.txt",
   "background": "systems/ratasenlasparedes/img/banner.jpeg"
 }

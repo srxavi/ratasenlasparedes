@@ -8,7 +8,7 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
 
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["ratasenlasparedes", "sheet", "actor"],
       template: "systems/ratasenlasparedes/templates/actor/actor-sheet.html",
       width: 520,
@@ -32,7 +32,7 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
       this._prepareCharacterItems(data);
     }
 
-    data.enrichedBio = await TextEditor.enrichHTML(this.object.system.biography, {async: true})
+    data.enrichedBio = await TextEditor.enrichHTML(this.object.system.biography)
 
     return data;
   }
@@ -144,20 +144,20 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
 
             // Crear fórmula incluyendo el mod
             const formula = mod !== 0 ? `${numDice}d${faces}${mod > 0 ? '+' : ''}${mod}` : `${numDice}d${faces}`;
-            const result = await new Roll(formula).evaluate({async: true});
+            const result = await new Roll(formula).evaluate();
 
             let total = result.total;
             if (total < 0) total = 0;
 
             const label = `Pierdes ${total} Puntos de Cordura`;
-            
-            AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
-            
+
+            foundry.audio.AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
+
             // Mostrar dados 3D si están disponibles
             if (game.dice3d) {
                 await game.dice3d.showForRoll(result, game.user, true);
             }
-            
+
             // Renderizar con el total final, reemplazando si es negativo
             let diceHtml = await result.render();
             if (result.total < 0) {
@@ -167,9 +167,8 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
             await ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor: this.actor }),
               flags: {'ratasenlasparedes':{'text':label, 'detail': total}},
-              type: CONST.CHAT_MESSAGE_TYPES.ROLL,
               content: diceHtml,
-              roll: result
+              rolls: [result]
             });
 
             if (total <= 0) return;
@@ -312,9 +311,9 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
         const label = dataset.label ? `Realiza una tirada <strong>${difficultyText}${modText}</strong> de <strong>${dataset.label}</strong>` : '';
         
       const roll = new Roll(rollString, this.actor.system);
-            AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
-            const result = await roll.evaluate({async: true});
-            
+            foundry.audio.AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
+            const result = await roll.evaluate();
+
             if (game.dice3d) {
                 await game.dice3d.showForRoll(result, game.user, true);
             }
@@ -351,9 +350,8 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
             await ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor: this.actor }),
               flags: {'ratasenlasparedes':{'text':label, 'detail': finalTotal}},
-              type: CONST.CHAT_MESSAGE_TYPES.ROLL,
               content: rendered,
-              roll: result
+              rolls: [result]
             });
     }
     
@@ -390,9 +388,9 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
             const modText = difficulty === "0" ? "" : ` (${difficulty})`;
             const rollString = difficulty === "0" ? dataset.roll : `${dataset.roll} ${difficulty}`;
             const roll = new Roll(rollString, this.actor.system);
-            AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
-            const result = await roll.evaluate({async: true});
-            
+            foundry.audio.AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
+            const result = await roll.evaluate();
+
             // Mostrar dados 3D si están disponibles
             if (game.dice3d) {
                 await game.dice3d.showForRoll(result, game.user, true);
@@ -423,8 +421,7 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
             await ChatMessage.create({
                 speaker: ChatMessage.getSpeaker({ actor: this.actor }),
                 flags: {'ratasenlasparedes':{'text':label, 'goal':goal}},
-                type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-                roll: result,
+                rolls: [result],
                 content: html
             });
         } catch (error) {
@@ -442,21 +439,20 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
 
         const damageString = damageMod === 0 ? dataset.roll : `${dataset.roll} + (${damageMod})`;
         const roll = new Roll(damageString);
-        AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
-        const result = await roll.evaluate({async: true});
+        foundry.audio.AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
+        const result = await roll.evaluate();
         if (game.dice3d) {
             await game.dice3d.showForRoll(result, game.user, true);
         }
         const html = await result.render();
-        
+
         const label = dataset.label ? `El resultado de efecto de <strong>${dataset.label}</strong> es:` : '';
-        
+
         await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor: this.actor }),
             flags: {'ratasenlasparedes':{'text':label}},
-            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             content: html,
-            roll: result
+            rolls: [result]
         });
     }
 
@@ -493,7 +489,7 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
             const modText = difficulty === "0" ? "" : ` (${difficulty})`;
             const rollString = difficulty === "0" ? dataset.roll : `${dataset.roll} ${difficulty}`;
             const roll = new Roll(rollString, this.actor.system);
-            AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
+            foundry.audio.AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
             const result = await roll.evaluate();
             
             // Mostrar dados 3D si están disponibles
@@ -506,16 +502,16 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
             let goal;
 
             if (result.total <= 7) {
-                label += ` <strong>Falla</strong> y sufre <a class="entity-link" data-pack="ratasenlasparedes.ayudas" data-lookup="Consecuencias" draggable="true"><i class="fas fa-book-open"></i> dos Consecuencias</a>.`;
+                label += ` <strong>Falla</strong> y sufre <a class="content-link" data-pack="ratasenlasparedes.ayudas" data-lookup="Consecuencias" draggable="true"><i class="fas fa-book-open"></i> dos Consecuencias</a>.`;
                 goal = "Fallo";
             } else if (result.total <= 9) {
-                label += ` Tiene <strong>éxito</strong>, pero sufre <a class="entity-link" data-pack="ratasenlasparedes.ayudas" data-lookup="Consecuencias" draggable="true"><i class="fas fa-book-open"></i> una Consecuencia</a>`;
+                label += ` Tiene <strong>éxito</strong>, pero sufre <a class="content-link" data-pack="ratasenlasparedes.ayudas" data-lookup="Consecuencias" draggable="true"><i class="fas fa-book-open"></i> una Consecuencia</a>`;
                 goal = "Parcial";
             } else if (result.total <= 11) {
-                label += ` Tiene <strong>éxito</strong> y elige <a class="entity-link" data-pack="ratasenlasparedes.ayudas" data-lookup="Consecuencias" draggable="true"><i class="fas fa-book-open"></i> una Consecuencia</a> para su objetivo.`;
+                label += ` Tiene <strong>éxito</strong> y elige <a class="content-link" data-pack="ratasenlasparedes.ayudas" data-lookup="Consecuencias" draggable="true"><i class="fas fa-book-open"></i> una Consecuencia</a> para su objetivo.`;
                 goal = "Exito";
             } else {
-                label += ` Tiene <strong>éxito</strong> y elige <a class="entity-link" data-pack="ratasenlasparedes.ayudas" data-lookup="Consecuencias" draggable="true"><i class="fas fa-book-open"></i> dos Consecuencias</a> para su objetivo.`;
+                label += ` Tiene <strong>éxito</strong> y elige <a class="content-link" data-pack="ratasenlasparedes.ayudas" data-lookup="Consecuencias" draggable="true"><i class="fas fa-book-open"></i> dos Consecuencias</a> para su objetivo.`;
                 goal = "¡Oh sí!";
             }
 
@@ -526,8 +522,7 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
             await ChatMessage.create({
                 speaker: ChatMessage.getSpeaker({ actor: this.actor }),
                 flags: {'ratasenlasparedes':{'text':label, 'goal':goal}},
-                type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-                roll: result,
+                rolls: [result],
                 content: html
             });
         } catch (error) {
@@ -552,21 +547,20 @@ export class ratasenlasparedesActorSheet extends ActorSheet {
 
         const damageString = damageMod === 0 ? dataset.roll : `${dataset.roll} + (${damageMod})`;
         const roll = new Roll(damageString);
-        AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
-        const result = await roll.evaluate({async: true});
+        foundry.audio.AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
+        const result = await roll.evaluate();
         if (game.dice3d) {
             await game.dice3d.showForRoll(result, game.user, true);
         }
         const html = await result.render();
-        
+
         const label = dataset.label ? `Causa daño con su <strong>${dataset.label}</strong>.` : '';
-        
+
         await ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor: this.actor }),
             flags: {'ratasenlasparedes':{'text':label}},
-            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
             content: html,
-            roll: result
+            rolls: [result]
         });
     }
   }
@@ -595,7 +589,7 @@ console.log(sheetData);
     // let totalWeight = 0;
     for (let i of sheetData.items) {
       let item = i.data;
-      i.img = i.img || DEFAULT_TOKEN;
+      i.img = i.img || "icons/svg/mystery-man.svg";
       // Append to resource.
       if (i.type === 'item') {
         resource.push(i);
@@ -639,37 +633,38 @@ console.log(sheetData);
 
 }
 
-Hooks.on('renderChatMessage', (message, html, data) => {
-    html.find('.rollable[data-roll-type="spell-sanity"]').click(async ev => {
-        ev.preventDefault();
-        const dataset = ev.currentTarget.dataset;
-        const speaker = message.speaker;
-        const actor = ChatMessage.getSpeakerActor(speaker);
-        
-        const roll = new Roll(dataset.roll, actor ? actor.system : {});
-        AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
-        const result = await roll.evaluate({async: true});
-        if (game.dice3d) {
-            await game.dice3d.showForRoll(result, game.user, true);
-        }
-        const rollHtml = await result.render();
-        
-        const sanityLoss = result.total;
-        const label = `Pierdes ${sanityLoss} puntos de cordura.`;
-        
-        // Update actor's sanity
-        if (actor && typeof actor.system.sanity?.value === 'number') {
-            const currentSanity = actor.system.sanity.value;
-            const newSanity = currentSanity - sanityLoss;
-            await actor.update({'system.sanity.value': newSanity});
-        }
-        
-        await ChatMessage.create({
-            speaker: speaker,
-            flags: {'ratasenlasparedes':{'text':label}},
-            type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-            content: rollHtml,
-            roll: result
+Hooks.on('renderChatMessageHTML', (message, html, data) => {
+    html.querySelectorAll('.rollable[data-roll-type="spell-sanity"]').forEach(el => {
+        el.addEventListener('click', async ev => {
+            ev.preventDefault();
+            const dataset = ev.currentTarget.dataset;
+            const speaker = message.speaker;
+            const actor = ChatMessage.getSpeakerActor(speaker);
+
+            const roll = new Roll(dataset.roll, actor ? actor.system : {});
+            foundry.audio.AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
+            const result = await roll.evaluate();
+            if (game.dice3d) {
+                await game.dice3d.showForRoll(result, game.user, true);
+            }
+            const rollHtml = await result.render();
+
+            const sanityLoss = result.total;
+            const label = `Pierdes ${sanityLoss} puntos de cordura.`;
+
+            // Update actor's sanity
+            if (actor && typeof actor.system.sanity?.value === 'number') {
+                const currentSanity = actor.system.sanity.value;
+                const newSanity = currentSanity - sanityLoss;
+                await actor.update({'system.sanity.value': newSanity});
+            }
+
+            await ChatMessage.create({
+                speaker: speaker,
+                flags: {'ratasenlasparedes':{'text':label}},
+                content: rollHtml,
+                rolls: [result]
+            });
         });
     });
 });

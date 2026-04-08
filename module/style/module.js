@@ -267,7 +267,7 @@ Hooks.on("renderCompendiumDirectory", (app, html) => {
   });
 
   // Verificar si es una ventana emergente y aplicar el banner
-  const appElement = app?.element?.[0];
+  const appElement = app?.element instanceof HTMLElement ? app.element : app?.element?.[0];
   if (appElement?.classList.contains('sidebar-popout')) {
     const popoutSection = appElement.matches('section[id^="compendium-"]') 
       ? appElement 
@@ -282,7 +282,7 @@ Hooks.on("renderCompendiumDirectory", (app, html) => {
 
 // Limpiar referencias cuando se cierra una ventana
 Hooks.on("closeApplication", (app) => {
-  const closedAppId = app.element?.[0]?.id;
+  const closedAppId = app.element instanceof HTMLElement ? app.element.id : app.element?.[0]?.id;
   if (closedAppId && bannersBeingApplied.has(closedAppId)) {
     bannersBeingApplied.delete(closedAppId);
   }

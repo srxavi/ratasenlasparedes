@@ -35,9 +35,10 @@ Hooks.once('init', async function () {
     };
 
     // Manejar el borrado de mensajes individuales
-    Hooks.on('renderChatMessage', (message, html, data) => {
+    Hooks.on('renderChatMessageHTML', (message, html, data) => {
         if (game.user.isGM) {
-            html.find('.message-delete').click(ev => {
+            const deleteBtn = html.querySelector('.message-delete');
+            if (deleteBtn) deleteBtn.addEventListener('click', ev => {
                 ev.preventDefault();
                 message.delete();
             });
@@ -52,9 +53,9 @@ Hooks.once('init', async function () {
         formula: "1d6",
         decimals: 2
     };
-    // Define custom Entity classes
-    CONFIG.Actor.entityClass = ratasenlasparedesActor;
-    CONFIG.Item.entityClass = ratasenlasparedesItem;
+    // Define custom Document classes
+    CONFIG.Actor.documentClass = ratasenlasparedesActor;
+    CONFIG.Item.documentClass = ratasenlasparedesItem;
 
     // Register sheet application classes
     Actors.registerSheet("ratasenlasparedes", ratasenlasparedesActorSheet, {
@@ -284,8 +285,8 @@ Hooks.on('createItem', (sheet, aux, itemId) => {
     }
 });
 
-Hooks.on("preCreateScene", (createData, options, userID) => {
-    createData.backgroundColor = '#000000';
+Hooks.on("preCreateScene", (scene, data, options, userID) => {
+    scene.updateSource({ backgroundColor: '#000000' });
 })
 
 
@@ -336,16 +337,16 @@ Hooks.on('ready', () => {
         });
     });
 
-    $(document).on('click', '.ratas-simple-roller-roll', ev => {
+    $(document).on('click', '.ratas-simple-roller-roll', async ev => {
         let roll = new Roll(String($(ev.currentTarget).data('formula')));
-        roll.roll();
+        await roll.evaluate();
         roll.toMessage();
     });
 
-    $(document).on('click', '.ratas-sanity-check', ev => {
+    $(document).on('click', '.ratas-sanity-check', async ev => {
         let roll = new Roll(String($(ev.currentTarget).data('formula')));
         let actorId = String($(ev.currentTarget).data('actor-id'));
-        roll.roll({async: false});
+        await roll.evaluate();
         let label = "Perdida de cordura.";
         let sanityData = {
             speaker: ChatMessage.getSpeaker({ actor: actorId }),
@@ -397,7 +398,7 @@ Hooks.on("createChatMessage", async (chatMSG, flags, userId) => {
         if (chatMSG.isRoll) {
             const existingDetail = chatMSG.getFlag("ratasenlasparedes", "detail");
             if (existingDetail === undefined || existingDetail === null) {
-                await chatMSG.setFlag("ratasenlasparedes", "detail", chatMSG.roll.total);
+                await chatMSG.setFlag("ratasenlasparedes", "detail", chatMSG.rolls?.[0]?.total);
             }
         }
     }
@@ -410,7 +411,7 @@ Hooks.on("createChatMessage", async (chatMSG, flags, userId) => {
     if (chatMSG.isRoll && chatMSG.isContentVisible) {
         let rollData = {
             //flavor: ChatMSG.getFlag('ratasenlasparedes', 'text'),
-            formula: chatMSG.rolls.formula,
+            formula: chatMSG.rolls[0]?.formula,
             username: game.user.name,
         };
         // console.log(rollData);

@@ -65,7 +65,7 @@ export class ratasenlasparedesItemSheet extends ItemSheet {
 
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["ratasenlasparedes", "sheet", "item"],
       width: 460,
       height: 520,
@@ -134,7 +134,6 @@ export class ratasenlasparedesItemSheet extends ItemSheet {
     // In V13, enrichHTML is required for proper editor functionality
     // Aseguramos que la descripción sea siempre una cadena de texto antes de enriquecerla,
     context.enrichedDescription = await TextEditor.enrichHTML(system.description, {
-      async: true,
       secrets: this.document.isOwner,
       relativeTo: this.document
     });
